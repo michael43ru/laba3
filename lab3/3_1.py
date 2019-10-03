@@ -1,5 +1,6 @@
 from graph import *
 
+
 windowSize(1000, 600)
 canvasSize(1000, 600)
 
@@ -36,63 +37,83 @@ def ell(a, b, x0, y0):
     l.append((x0, y0 + b))
     polygon(l)
 
+def paren(x, y):
+
+    ell(60, 130, x, y)
+
+    brushColor(240, 230, 230)
+    penColor(230, 230, 230)
+    circle(x + 10, y - 170, 50)
+
+    penColor('black')
+    line(x - 40, y - 90, x - 190, y + 60)
+    line(x + 40, y - 90, x + 220, y + 70)
+
+    line(x - 20, y + 120, x - 90, y + 260)
+    line(x - 90, y + 260, x - 120, y + 260)
+    line(x + 30, y + 110, x + 50, y + 260)
+    line(x + 50, y + 260, x + 80, y + 260)
+
+def devka():
+
+    brushColor(255, 100, 175)
+    penColor(255, 100, 175)
+    polygon([(600, 430), (700, 150), (800, 430), (600, 430)])
+
+    brushColor(240, 230, 230)
+    penColor(230, 230, 230)
+    circle(700, 140, 50)
+
+    penColor('black')
+    line(520, 380, 675, 210)
+    line(720, 210, 790, 295)
+    line(790, 295, 890, 220)
+    
+    line(675, 430, 675, 570)
+    line(725, 430, 725, 570)
+    line(675, 570, 645, 570)
+    line(725, 570, 755, 570)
+
+def morozh(x, y):
+     
+    brushColor(240, 220, 50)
+    penColor(240, 220, 50)
+    polygon([(x, y), (x - 80, y - 45), (x - 5, y - 100)])
+
+    brushColor('red')
+    penColor('red')
+    circle(x - 30, y - 95, 22)
+
+    brushColor(70, 20, 0)
+    penColor(70, 20, 0)
+    circle(x - 65, y - 65, 22)
+
+    brushColor('white')
+    penColor('white')
+    circle(x - 60, y - 100, 22)
+
+def serdech(x, y, a):
+
+    # вращение вокруг (x - 22, y + 78)
+    penColor('black')
+    line(x - 32, y + 108, x + 8, y - 22)
+    
+    brushColor('red')
+    penColor('red')
+
+    polygon([(x, y), (x, y - 92), (x + 68, y - 62)])
+    circle(x + 18, y - 87, 20)
+    circle(x + 53, y - 72, 20)
+
+def povorot():
+    
+
+paren(300, 310)
+devka()
 
 
-ell(60, 130, 300, 310)
-
-brushColor(255, 100, 175)
-penColor(255, 100, 175)
-polygon([(600, 430), (700, 150), (800, 430), (600, 430)])
-
-brushColor(240, 230, 230)
-penColor(230, 230, 230)
-circle(305, 140, 50)
-circle(700, 140, 50)
-
-penColor('black')
-
-line(260, 220, 110, 370)
-line(340, 220, 520, 380)
-line(520, 380, 675, 210)
-line(720, 210, 790, 295)
-line(790, 295, 890, 220)
-line(880, 250, 920, 120)
-
-line(280, 430, 210, 570)
-line(210, 570, 180, 570)
-line(330, 420, 350, 570)
-line(350, 570, 380, 570)
-
-line(675, 430, 675, 570)
-line(725, 430, 725, 570)
-line(675, 570, 645, 570)
-line(725, 570, 755, 570)
-
-brushColor(240, 220, 50)
-penColor(240, 220, 50)
-
-polygon([(120, 370), (40, 325), (115, 270)])
-
-brushColor('red')
-penColor('red')
-
-polygon([(912, 142), (912, 50), (980, 80)])
-circle(930, 55, 20)
-circle(965, 70, 20)
-
-circle(90, 275, 22)
-
-brushColor(70, 20, 0)
-penColor(70, 20, 0)
-circle(55, 305, 22)
-
-brushColor('white')
-penColor('white')
-circle(60, 270, 22)
-
-
-
-
+serdech(912, 142)
+morozh(120, 370)
 
 run()
 
