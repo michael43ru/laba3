@@ -1,0 +1,161 @@
+from graph import *
+
+penColor(255,0,255)
+canvasSize(1560,720)
+windowSize(1324,720)
+penColor("black")
+penSize(2)
+
+k = 3
+p=0
+o=0
+i=1
+
+##Background
+brushColor(randColor())
+rectangle(0*k+p,0*k+o,800*k,400*k+o)
+
+def face(k, l, p, o):
+       
+    ##Face
+    brushColor(randColor())
+    polygon([(115*k+p,89*k*l+o),(108*k+p,77*k*l+o),(108*k+p,70*k*l+o),
+              (103*k+p,58*k*l+o),(104*k+p,25*k*l+o),(149*k+p,20*k*l+o),
+              (150*k+p,55*k*l+o),(141*k+p,69*k*l+o),(143*k+p,77*k*l+o),
+              (129*k+p,90*k*l+o),(115*k+p,89*k*l+o)])
+    
+    #Lips
+    penSize(6)
+    brushColor(randColor())
+    polygon([(113*k+p,74*k*l+o),(118*k+p,71*k*l+o),(128*k+p,71*k*l+o),
+              (131*k+p,74*k*l+o),(124*k+p,80*k*l+o),(117*k+p,80*k*l+o),
+              (113*k+p,74*k*l+o)])
+    
+    #Eyes
+    penSize(5)
+    polyline([(130*k+p,52*k*l+o),(134*k+p,51*k*l+o),(139*k+p,53*k*l+o)])
+    polyline([(114*k+p,52*k*l+o),(107*k+p,52*k*l+o),(107*k+p,55*k*l+o)])
+    polyline([(118*k+p,64*k*l+o),(121*k+p,66*k*l+o),(124*k+p,65*k*l+o),(128*k+p,65*k*l+o)])
+    polyline([(130*k+p,44*k*l+o),(139*k+p,42*k*l+o),(146*k+p,48*k*l+o)])
+    polyline([(114*k+p,45*k*l+o),(107*k+p,43*k*l+o),(103*k+p,46*k*l+o)])
+    
+    ##Brows
+    brushColor(randColor())
+    penSize(2)
+    polygon([(126*k+p,51*k*l+o),(129*k+p,48*k*l+o),(133*k+p,46*k*l+o),(141*k+p,50*k*l+o),(134*k+p,50*k*l+o),(128*k+p,50*k*l+o)])
+    polygon([(117*k+p,51*k*l+o),(115*k+p,48*k*l+o),(108*k+p,49*k*l+o),(104*k+p,52*k*l+o),(109*k+p,51*k*l+o),(117*k+p,51*k*l+o)])
+    
+    ##Hair
+    brushColor(randColor())
+    penSize(2)
+    polygon([(121*k+p,27*k*l+o),(138*k+p,22*k*l+o),(146*k+p,25*k*l+o),
+              (150*k+p,40*k*l+o),(149*k+p,55*k*l+o),(142*k+p,68*k*l+o),
+              (144*k+p,78*k*l+o),(159*k+p,84*k*l+o),(159*k+p,74*k*l+o),
+              (171*k+p,61*k*l+o),(171*k+p,28*k*l+o),(162*k+p,16*k*l+o),
+              (149*k+p,14*k*l+o),(137*k+p,4*k*l+o),(112*k+p,3*k*l+o),
+              (100*k+p,15*k*l+o),(92*k+p,16*k*l+o),(95*k+p,38*k*l+o),
+              (91*k+p,44*k*l+o),(106*k+p,66*k*l+o),(103*k+p,41*k*l+o),
+              (110*k+p,35*k*l+o),(110*k+p,24*k*l+o),(121*k+p,27*k*l+o)])
+    
+
+
+face(-k, -1, p + 775, o)
+face(k, 1, p, o + 300)
+face(k, 1, p + 600, o + 300)
+face(-k, 1, p + 1075, o + 300)
+face(-k, -1, p + 1375, o)
+face(-k, -1, p + 1075, o + 300)
+
+
+
+'''while i<=3:
+    
+    ##Face
+    brushColor(randColor())
+    polygon([(115*k+p,89*k+o),(108*k+p,77*k+o),(108*k+p,70*k+o),
+              (103*k+p,58*k+o),(104*k+p,25*k+o),(149*k+p,20*k+o),
+              (150*k+p,55*k+o),(141*k+p,69*k+o),(143*k+p,77*k+o),
+              (129*k+p,90*k+o),(115*k+p,89*k+o)])
+    
+    #Lips
+    penSize(6)
+    brushColor(randColor())
+    polygon([(113*k+p,74*k+o),(118*k+p,71*k+o),(128*k+p,71*k+o),
+              (131*k+p,74*k+o),(124*k+p,80*k+o),(117*k+p,80*k+o),
+              (113*k+p,74*k+o)])
+    
+    #Eyes
+    penSize(5)
+    polyline([(130*k+p,52*k+o),(134*k+p,51*k+o),(139*k+p,53*k+o)])
+    polyline([(114*k+p,52*k+o),(107*k+p,52*k+o),(107*k+p,55*k+o)])
+    polyline([(118*k+p,64*k+o),(121*k+p,66*k+o),(124*k+p,65*k+o),(128*k+p,65*k+o)])
+    polyline([(130*k+p,44*k+o),(139*k+p,42*k+o),(146*k+p,48*k+o)])
+    polyline([(114*k+p,45*k+o),(107*k+p,43*k+o),(103*k+p,46*k+o)])
+    
+    ##Brows
+    brushColor(randColor())
+    penSize(2)
+    polygon([(126*k+p,51*k+o),(129*k+p,48*k+o),(133*k+p,46*k+o),(141*k+p,50*k+o),(134*k+p,50*k+o),(128*k+p,50*k+o)])
+    polygon([(117*k+p,51*k+o),(115*k+p,48*k+o),(108*k+p,49*k+o),(104*k+p,52*k+o),(109*k+p,51*k+o),(117*k+p,51*k+o)])
+    
+    ##Hair
+    brushColor(randColor())
+    penSize(2)
+    polygon([(121*k+p,27*k+o),(138*k+p,22*k+o),(146*k+p,25*k+o),
+              (150*k+p,40*k+o),(149*k+p,55*k+o),(142*k+p,68*k+o),
+              (144*k+p,78*k+o),(159*k+p,84*k+o),(159*k+p,74*k+o),
+              (171*k+p,61*k+o),(171*k+p,28*k+o),(162*k+p,16*k+o),
+              (149*k+p,14*k+o),(137*k+p,4*k+o),(112*k+p,3*k+o),
+              (100*k+p,15*k+o),(92*k+p,16*k+o),(95*k+p,38*k+o),
+              (91*k+p,44*k+o),(106*k+p,66*k+o),(103*k+p,41*k+o),
+              (110*k+p,35*k+o),(110*k+p,24*k+o),(121*k+p,27*k+o)])
+    i+=1
+    p+=300
+o+=300
+p=0
+i=1
+while i<=3:
+    
+    ##Face
+    brushColor(randColor())
+    polygon([(115*k+p,89*k+o),(108*k+p,77*k+o),(108*k+p,70*k+o),
+              (103*k+p,58*k+o),(104*k+p,25*k+o),(149*k+p,20*k+o),
+              (150*k+p,55*k+o),(141*k+p,69*k+o),(143*k+p,77*k+o),
+              (129*k+p,90*k+o),(115*k+p,89*k+o)])
+    
+    #Lips
+    penSize(6)
+    brushColor(randColor())
+    polygon([(113*k+p,74*k+o),(118*k+p,71*k+o),(128*k+p,71*k+o),
+              (131*k+p,74*k+o),(124*k+p,80*k+o),(117*k+p,80*k+o),
+              (113*k+p,74*k+o)])
+    
+    #Eyes
+    penSize(5)
+    polyline([(130*k+p,52*k+o),(134*k+p,51*k+o),(139*k+p,53*k+o)])
+    polyline([(114*k+p,52*k+o),(107*k+p,52*k+o),(107*k+p,55*k+o)])
+    polyline([(118*k+p,64*k+o),(121*k+p,66*k+o),(124*k+p,65*k+o),(128*k+p,65*k+o)])
+    polyline([(130*k+p,44*k+o),(139*k+p,42*k+o),(146*k+p,48*k+o)])
+    polyline([(114*k+p,45*k+o),(107*k+p,43*k+o),(103*k+p,46*k+o)])
+    
+    ##Brows
+    brushColor(randColor())
+    penSize(2)
+    polygon([(126*k+p,51*k+o),(129*k+p,48*k+o),(133*k+p,46*k+o),(141*k+p,50*k+o),(134*k+p,50*k+o),(128*k+p,50*k+o)])
+    polygon([(117*k+p,51*k+o),(115*k+p,48*k+o),(108*k+p,49*k+o),(104*k+p,52*k+o),(109*k+p,51*k+o),(117*k+p,51*k+o)])
+    
+    ##Hair
+    brushColor(randColor())
+    penSize(2)
+    polygon([(121*k+p,27*k+o),(138*k+p,22*k+o),(146*k+p,25*k+o),
+              (150*k+p,40*k+o),(149*k+p,55*k+o),(142*k+p,68*k+o),
+              (144*k+p,78*k+o),(159*k+p,84*k+o),(159*k+p,74*k+o),
+              (171*k+p,61*k+o),(171*k+p,28*k+o),(162*k+p,16*k+o),
+              (149*k+p,14*k+o),(137*k+p,4*k+o),(112*k+p,3*k+o),
+              (100*k+p,15*k+o),(92*k+p,16*k+o),(95*k+p,38*k+o),
+              (91*k+p,44*k+o),(106*k+p,66*k+o),(103*k+p,41*k+o),
+              (110*k+p,35*k+o),(110*k+p,24*k+o),(121*k+p,27*k+o)])
+    i+=1
+    p+=300
+'''
+run()
