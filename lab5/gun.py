@@ -101,6 +101,7 @@ class Ball:
 
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
+
         Args:
             obj: Обьект, с которым проверяется столкновение.
             
@@ -154,7 +155,8 @@ class Gun:
             self.y = 50
         if self.y > 550:
             self.y = 550
-        
+        self.id = canv.create_line(20, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
+
     def fire2_start(self, event):
         self.f2_on = 1
 
@@ -165,12 +167,17 @@ class Gun:
         """
         # balls, bullet
         self.bullet += 1
+
+        
+        # global balls, bullet
+        g1.bullet += 1
         new_ball = Ball()
         new_ball.r += 5
         self.an = math.atan((event.y-new_ball.y) / (event.x-new_ball.x))
         new_ball.vx = self.f2_power * math.cos(self.an)
         new_ball.vy = - self.f2_power * math.sin(self.an)
         self.balls += [new_ball]
+        g1.balls += [new_ball]
         self.f2_on = 0
         self.f2_power = 10
 
@@ -185,6 +192,9 @@ class Gun:
         canv.coords(self.id, self.x, self.y,
                     self.x + max(self.f2_power, 20) * math.cos(self.an),
                     self.y + max(self.f2_power, 20) * math.sin(self.an)
+        canv.coords(self.id, 20, 450,
+                    20 + max(self.f2_power, 20) * math.cos(self.an),
+                    450 + max(self.f2_power, 20) * math.sin(self.an)
                     )
 
     def power_up(self):
@@ -245,6 +255,9 @@ canv.bind('<KeyRelease-a>', g1.move_right)
 def new_game(event=''):
     # gun, t1, screen1, balls, bullet
 
+def new_game(event=''):
+    # global gun, t1, screen1, balls, bullet
+
     t1.new_target()
     g1.bullet = 0
     g1.balls = []
@@ -265,6 +278,9 @@ def new_game(event=''):
     t1.live = 1
     while t1.live:
         g1.move()
+    z = 0.03
+    t1.live = 1
+    while t1.live:
         for b in g1.balls:
             b.move()
             if b.down == 10:
