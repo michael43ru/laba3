@@ -102,14 +102,13 @@ class Ball:
         """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
         Args:
             obj: Обьект, с которым проверяется столкновение.
-
         Returns:
             Возвращает True в случае столкновения мяча и цели. В противном случае возвращает False.
         """
 
         # FIXME
 
-        if obj.n == 0 and ((self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2) or (
+        if obj.n != 4 and ((self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2) or (
            self.x < obj.x <= self.x + self.vx and self.y > obj.y) and (
             self.y - self.vy <= obj.y or self.x < obj.x and self.y < obj.y) and (
              self.x + self.vx >= obj.x and self.y - self.vy >= obj.y):
@@ -203,7 +202,7 @@ class Gun:
         """Прицеливание. Зависит от положения мыши."""
         
         if event:
-            self.an = math.atan((event.y - 450) / (event.x - 20))
+            self.an = math.atan((event.y - self.y) / (event.x - self.x))
         if self.f2_on:
             canv.itemconfig(self.id, fill='orange')
         else:
@@ -235,10 +234,10 @@ class Target:
         self.live = 1
         # FIXME: don't work!!! How to call this functions when object is created?
         self.id = canv.create_oval(0, 0, 0, 0)
-        self.id_points = canv.create_text(30, 30, text=self.points, font='28')
-        self.x = 0
-        self.y = 0
-        self.r = 0
+        self.id_points = canv.create_text(30, 30, text=targets[0].points, font='28')
+        x = self.x = rnd(600, 780)
+        y = self.y = rnd(300, 550)
+        r = self.r = rnd(2, 50)
         self.vx = 0
         self.vy = 0
         self.color = 0
@@ -263,7 +262,7 @@ class Target:
             self.vy = -abs(self.vy)
         for t in targets:
             if t != self:
-                if self.n == 0 and t.n == 0 and (
+                if self.n != 4 and t.n != 4 and (
                    (self.x - t.x) ** 2 + (self.y - t.y) ** 2 <= (self.r + t.r) ** 2 or (
                     self.x < t.x and (self.y > t.y) and (self.x + self.vx >= t.x) and (
                      self.y - self.vy <= t.y)) or ((self.x < t.x) and (self.y < t.y) and (
@@ -279,7 +278,7 @@ class Target:
                     t.vx = vx
                     t.vy = vy
 
-                if self.n == 0 and t.n == 4 and (
+                if self.n != 4 and t.n == 4 and (
                    ((abs(self.x - t.x) <= self.r + t.r and abs(self.y - t.y) <= t.r) or (
                     abs(self.y - t.y) <= self.r + t.r and abs(self.x - t.x) <= t.r) or (
                     (self.x - (t.x - t.r)) ** 2 + (self.y - (t.y - t.r)) ** 2 <= self.r ** 2) or (
@@ -297,7 +296,7 @@ class Target:
                     t.vx = vx
                     t.vy = vy
 
-                if self.n == 4 and t.n == 0 and (
+                if self.n == 4 and t.n != 4 and (
                    ((abs(self.x - t.x) <= self.r + t.r and abs(self.y - t.y) <= self.r) or (
                      abs(self.y - t.y) <= self.r + t.r and abs(self.x - t.x) <= self.r) or (
                      (t.x - (self.x - self.r)) ** 2 + (t.y - (self.y - self.r)) ** 2 <= t.r ** 2) or (
@@ -337,8 +336,14 @@ class Target:
             canv.delete(self.id)
             if self.n == 0:
                 self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
-            if self.n == 4:
+            elif self.n == 4:
                 self.id = canv.create_rectangle(x - r, y - r, x + r, y + r, fill=color)
+            else:
+                points = []
+                for n in range(self.n):
+                    points.append(self.x + (self.r * math.sin(2 * n * math.pi / self.n)))
+                    points.append(self.y + (self.r * math.cos(2 * n * math.pi / self.n)))
+                self.id = canv.create_polygon(points, fill=color)
 
     def speed(self):
         self.vx = rnd(-5, 5)
@@ -356,7 +361,7 @@ class Target:
             x = self.x = rnd(600, 780)
             y = self.y = rnd(300, 550)
             for t in targets:
-                if self != t and ((self.r + t.r) * 2) ** 2 <= (self.x - t.x) ** 2 + (self.y - t.y) ** 2:
+                if self != t and (((self.r + t.r) * 2) ** 2 <= (self.x - t.x) ** 2 + (self.y - t.y) ** 2):
                     self.down += 1'''
         self.down = 0
         color = self.color = 'red'
@@ -367,22 +372,30 @@ class Target:
 
         if self.n == 0:
             self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
-        if self.n == 4:
+        elif self.n == 4:
             self.id = canv.create_rectangle(x - r, y - r, x + r, y + r, fill=color)
+        else:
+            points = []
+            for n in range(self.n):
+                points.append(self.x + (self.r * math.sin(2 * n * math.pi / self.n)))
+                points.append(self.y + (self.r * math.cos(2 * n * math.pi / self.n)))
+            self.id = canv.create_polygon(points, outline='black', fill=color)
 
         # canv.itemconfig(self.id, fill=color)
 
     def hit(self, points=1):
         """Попадание шарика в цель."""
         canv.coords(self.id, -10, -10, -10, -10)
-        self.points += points
-        canv.itemconfig(self.id_points, text=self.points)
+        for t in targets:
+            t.points += points
+        canv.itemconfig(targets[0].id_points, text=self.points)
         self.down = 1
 
 
 targets = []
 t1 = Target(0)
 t2 = Target(4)
+t3 = Target(5)
 screen1 = canv.create_text(400, 300, text='', font='28')
 g1 = Gun()
 
