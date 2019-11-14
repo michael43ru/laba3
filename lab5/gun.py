@@ -19,12 +19,13 @@ canv.pack(fill=tk.BOTH, expand=1)
 
 
 class Ball:
-    def __init__(self):
+    def __init__(self, n):
         """ Конструктор класса ball
         Args:
         x - начальное положение мяча по горизонтали
         y - начальное положение мяча по вертикали
         """
+        self.n = n
         self.x = g1.x + 20
         self.y = g1.y
         self.r = 10
@@ -61,39 +62,125 @@ class Ball:
         self.x += self.vx
         self.y -= self.vy
         canv.delete(self.id)
-        self.id = canv.create_oval(
+        for t in g1.balls:
+            if t != self:
+                if self.n != 4 and t.n != 4 and (
+                   (self.x - t.x) ** 2 + (self.y - t.y) ** 2 <= (self.r + t.r) ** 2 or (
+                    self.x < t.x and (self.y > t.y) and (self.x + self.vx >= t.x) and (
+                     self.y - self.vy <= t.y)) or ((self.x < t.x) and (self.y < t.y) and (
+                      self.x + self.vx >= t.x and (self.y - self.vy >= t.y)))):
+                    self.x -= 1.01 * self.vx
+                    self.y -= 1.01 * self.vy
+                    t.x -= 1.01 * t.vx
+                    t.y -= 1.01 * t.vy
+                    vx = self.vx
+                    vy = self.vy
+                    self.vx = t.vx
+                    self.vy = t.vy
+                    t.vx = vx
+                    t.vy = vy
+
+                if self.n != 4 and t.n == 4 and (
+                   ((abs(self.x - t.x) <= self.r + t.r and abs(self.y - t.y) <= t.r) or (
+                    abs(self.y - t.y) <= self.r + t.r and abs(self.x - t.x) <= t.r) or (
+                    (self.x - (t.x - t.r)) ** 2 + (self.y - (t.y - t.r)) ** 2 <= self.r ** 2) or (
+                     (self.x - (t.x - t.r)) ** 2 + (self.y - (t.y + t.r)) ** 2 <= self.r ** 2) or (
+                      (self.x - (t.x + t.r)) ** 2 + (self.y - (t.y - t.r)) ** 2 <= self.r ** 2) or (
+                       (self.x - (t.x + t.r)) ** 2 + (self.y - (t.y + t.r)) ** 2 <= self.r ** 2))):
+                    self.x -= 1.01 * self.vx
+                    self.y -= 1.01 * self.vy
+                    t.x -= 1.005 * t.vx
+                    t.y -= 1.005 * t.vy
+                    vx = self.vx
+                    vy = self.vy
+                    self.vx = t.vx
+                    self.vy = t.vy
+                    t.vx = vx
+                    t.vy = vy
+
+                if self.n == 4 and t.n != 4 and (
+                   ((abs(self.x - t.x) <= self.r + t.r and abs(self.y - t.y) <= self.r) or (
+                     abs(self.y - t.y) <= self.r + t.r and abs(self.x - t.x) <= self.r) or (
+                     (t.x - (self.x - self.r)) ** 2 + (t.y - (self.y - self.r)) ** 2 <= t.r ** 2) or (
+                      (t.x - (self.x - self.r)) ** 2 + (t.y - (self.y + self.r)) ** 2 <= t.r ** 2) or (
+                       (t.x - (self.x + self.r)) ** 2 + (t.y - (self.y - self.r)) ** 2 <= t.r ** 2) or (
+                        (t.x - (self.x + self.r)) ** 2 + (t.y - (self.y + self.r)) ** 2 <= t.r ** 2))):
+                    self.x -= 1.005 * self.vx
+                    self.y -= 1.005 * self.vy
+                    t.x -= 1.01 * t.vx
+                    t.y -= 1.01 * t.vy
+                    vx = self.vx
+                    vy = self.vy
+                    self.vx = t.vx
+                    self.vy = t.vy
+                    t.vx = vx
+                    t.vy = vy
+
+                if self.n == 4 and t.n == 4 and (
+                   (abs(self.x - t.x) <= self.r + t.r) and (
+                     abs(self.y - t.y) <= self.r + t.r)):
+                    self.x -= 1.005 * self.vx
+                    self.y -= 1.005 * self.vy
+                    t.x -= 1.01 * t.vx
+                    t.y -= 1.01 * t.vy
+                    vx = self.vx
+                    vy = self.vy
+                    self.vx = t.vx
+                    self.vy = t.vy
+                    t.vx = vx
+                    t.vy = vy
+        x = self.x
+        y = self.y
+        r = self.r
+        color = self.color
+        if self.n == 0:
+            self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
+        elif self.n == 4:
+            self.id = canv.create_rectangle(x - r, y - r, x + r, y + r, fill=color)
+        else:
+            points = []
+            for n in range(self.n):
+                points.append(self.x + (self.r * math.sin(2 * n * math.pi / self.n)))
+                points.append(self.y + (self.r * math.cos(2 * n * math.pi / self.n)))
+            self.id = canv.create_polygon(points, fill=color)
+                
+        '''self.id = canv.create_oval(
             self.x - self.r,
             self.y - self.r,
             self.x + self.r,
             self.y + self.r,
             fill=self.color
-        )
-
+        )'''
+        
         if self.x + self.r >= 800 or self.x - self.r <= 0:
             self.x -= 1.05 * self.vx
-            self.vx = (-0.8) * self.vx
-            self.vy = 0.8 * self.vy
-        if self.y + self.r >= 575:
-            self.y += 1.005 * self.vy
-            self.vy = (-0.6) * self.vy
+            self.vx = (-0.9) * self.vx
+            self.vy = 0.9 * self.vy
+        if self.y + self.r > 575:
+            self.y = 575 - self.r
+            self.vy = (-0.75) * self.vy
             self.vy -= 1
-            self.vx = 0.8 * self.vx
+            self.vx = 0.75 * self.vx
             if self.vy < 3 and abs(self.vx) < 1 and self.down == 0:
                 self.down = 1
                 self.vy = 0
                 self.vx = 0
-                self.y = 575 - self.r
 
     def accelerate(self):
-        if self.down == 0:
+        if self.down == 0 and self.vx == 0 and self.vy == 0:
             self.vy -= 3.5
-        elif self.down < 10:
+        elif self.down < 10 and self.vx == 0 and self.vy == 0:
             self.down += 1
+        else:
+            self.down = 0
+            self.vy -= 3.5
         self.vy -= 0.05 * self.vy
         if abs(self.vx) > 0.1:
             self.vx -= 0.1 * self.vx
         else:
             self.vx = 0
+        if abs(self.vy) < 1:
+            self.vy = 0
         '''if self.down == 10:
             canv.delete(self.id)'''
         root.after(100, self.accelerate)
@@ -131,17 +218,23 @@ class Gun:
         self.f2_power = 10
         self.f2_on = 0
         self.an = 1
+        self.r = 5
         self.balls = []
         self.bullet = 0
         self.vx = 0
         self.vy = 0
         self.id = canv.create_line(20, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
+        # self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
         self.x = 20
         self.y = 450
+        self.kol_1 = canv.create_oval(self.x - self.r, self.y + 5, self.x + self.r,
+                                      self.y + 2 * self.r + 5, fill='brown')
+        self.kol_2 = canv.create_oval(self.x - self.r + 20, self.y + 5, self.x + self.r + 20,
+                                      self.y + 2 * self.r + 5, fill='brown')
 
-        canv.bind('<w>', self.move_up)
-        canv.bind('<d>', self.move_right)
-        canv.bind('<s>', self.move_down)
+        canv.bind('<Key-W>', self.move_up)
+        canv.bind('<D>', self.move_right)
+        canv.bind('<S>', self.move_down)
         canv.bind('<a>', self.move_left)
         canv.bind('<KeyRelease-w>', self.move_down)
         canv.bind('<KeyRelease-d>', self.move_left)
@@ -165,7 +258,9 @@ class Gun:
         print('a')
 
     def move(self):
-        # canv.delete(self.id)
+        canv.delete(self.id)
+        canv.delete(self.kol_1)
+        canv.delete(self.kol_2)
         self.x += self.vx
         self.y += self.vy
         if self.x < 20:
@@ -176,7 +271,11 @@ class Gun:
             self.y = 50
         if self.y > 550:
             self.y = 550
-        # self.id = canv.create_line(self.x, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
+        self.id = canv.create_line(self.x, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
+        self.kol_1 = canv.create_oval(self.x - self.r, self.y + 5, self.x + self.r,
+                                      self.y + 2 * self.r + 5, fill='brown')
+        self.kol_2 = canv.create_oval(self.x - self.r + 20, self.y + 5, self.x + self.r + 20,
+                                      self.y + 2 * self.r + 5, fill='brown')
 
     def fire2_start(self, event):
         self.f2_on = 1
@@ -188,13 +287,16 @@ class Gun:
         """
         # balls, bullet
         self.bullet += 1
-        new_ball = Ball()
+        a = [0, 4, 5, 6, 7, 8]
+        n = rnd(3, 8)
+        if n == 3:
+            n = 0
+        new_ball = Ball(n)
         new_ball.r += 5
         self.an = math.atan((event.y - new_ball.y) / (event.x - new_ball.x))
         new_ball.vx = self.f2_power * math.cos(self.an)
         new_ball.vy = - self.f2_power * math.sin(self.an)
         self.balls += [new_ball]
-        g1.balls += [new_ball]
         self.f2_on = 0
         self.f2_power = 10
 
@@ -211,6 +313,7 @@ class Gun:
         canv.coords(self.id, self.x, self.y,
                     self.x + max(self.f2_power, 20) * math.cos(self.an),
                     self.y + max(self.f2_power, 20) * math.sin(self.an))
+        
         '''canv.coords(self.id, 20, 450,
                     20 + max(self.f2_power, 20) * math.cos(self.an),
                     450 + max(self.f2_power, 20) * math.sin(self.an)
@@ -234,10 +337,10 @@ class Target:
         self.live = 1
         # FIXME: don't work!!! How to call this functions when object is created?
         self.id = canv.create_oval(0, 0, 0, 0)
-        self.id_points = canv.create_text(30, 30, text=targets[0].points, font='28')
-        x = self.x = rnd(600, 780)
-        y = self.y = rnd(300, 550)
-        r = self.r = rnd(2, 50)
+        self.id_points = canv.create_text(30, 30, text='', font='28')
+        self.x = rnd(600, 780)
+        self.y = rnd(300, 550)
+        self.r = rnd(2, 50)
         self.vx = 0
         self.vy = 0
         self.color = 0
@@ -356,13 +459,17 @@ class Target:
         x = self.x = rnd(600, 780)
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
-        '''while self.down > 0:
+        while self.down > 0:
             self.down = 0
             x = self.x = rnd(600, 780)
             y = self.y = rnd(300, 550)
-            for t in targets:
-                if self != t and (((self.r + t.r) * 2) ** 2 <= (self.x - t.x) ** 2 + (self.y - t.y) ** 2):
+            '''for i in range(len(targets)):
+                if targets[i] != self and (
+                 (self.x - targets[i].x) ** 2 + (self.y - targets[i].y) ** 2 <= (self.r + targets[i].r) ** 2):
                     self.down += 1'''
+            for t in targets:
+                if self != t and (((self.r + t.r) * 2) ** 2 >= (self.x - t.x) ** 2 + (self.y - t.y) ** 2):
+                    self.down += 1
         self.down = 0
         color = self.color = 'red'
 
@@ -436,6 +543,7 @@ def new_game():
                     canv.itemconfig(screen1, text='Вы уничтожили цель за ' + str(g1.bullet) + ' выстрелов')
                     canv.update()
                     time.sleep(1)
+                    canv.itemconfig(screen1, text='')
                     canv.bind('<Button-1>', g1.fire2_start)
                     canv.bind('<ButtonRelease-1>', g1.fire2_end)
         s = 0
