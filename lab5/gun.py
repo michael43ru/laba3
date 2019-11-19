@@ -218,23 +218,26 @@ class Gun:
         self.f2_power = 10
         self.f2_on = 0
         self.an = 1
-        self.r = 5
+        self.r = 7
         self.balls = []
         self.bullet = 0
         self.vx = 0
         self.vy = 0
-        self.id = canv.create_line(20, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
-        # self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
-        self.x = 20
+        self.x = 40
         self.y = 450
+        self.id = canv.create_line(self.x, self.y, self.x + 30, self.y - 30, width=7)  # FIXME: don't know how to set it...
+        # self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
+
         self.kol_1 = canv.create_oval(self.x - self.r, self.y + 5, self.x + self.r,
                                       self.y + 2 * self.r + 5, fill='brown')
         self.kol_2 = canv.create_oval(self.x - self.r + 20, self.y + 5, self.x + self.r + 20,
                                       self.y + 2 * self.r + 5, fill='brown')
+        self.opora = canv.create_line(self.x - 15, self.y + 7, self.x + 40, self.y + 7, width=5)
+        self.speed()
 
-        canv.bind('<Key-W>', self.move_up)
+        '''canv.bind('<w>', self.move_up)
         canv.bind('<D>', self.move_right)
-        canv.bind('<S>', self.move_down)
+        canv.bind('<s>', self.move_down)
         canv.bind('<a>', self.move_left)
         canv.bind('<KeyRelease-w>', self.move_down)
         canv.bind('<KeyRelease-d>', self.move_left)
@@ -255,12 +258,18 @@ class Gun:
 
     def move_left(self, event):
         self.vx -= 5
-        print('a')
+        print('a')'''
 
+    def speed(self):
+        self.vx = rnd(-5, 5)
+        self.vy = rnd(-5, 5)
+        root.after(2000, self.speed)
+    
     def move(self):
         canv.delete(self.id)
         canv.delete(self.kol_1)
         canv.delete(self.kol_2)
+        canv.delete(self.opora)
         self.x += self.vx
         self.y += self.vy
         if self.x < 20:
@@ -272,10 +281,11 @@ class Gun:
         if self.y > 550:
             self.y = 550
         self.id = canv.create_line(self.x, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
-        self.kol_1 = canv.create_oval(self.x - self.r, self.y + 5, self.x + self.r,
-                                      self.y + 2 * self.r + 5, fill='brown')
-        self.kol_2 = canv.create_oval(self.x - self.r + 20, self.y + 5, self.x + self.r + 20,
-                                      self.y + 2 * self.r + 5, fill='brown')
+        self.kol_1 = canv.create_oval(self.x - self.r - 5, self.y + 10, self.x + self.r - 5,
+                                      self.y + 2 * self.r + 10, fill='brown')
+        self.kol_2 = canv.create_oval(self.x - self.r + 30, self.y + 10, self.x + self.r + 30,
+                                      self.y + 2 * self.r + 10, fill='brown')
+        self.opora = canv.create_line(self.x - 15, self.y + 7, self.x + 40, self.y + 7, width=5)
 
     def fire2_start(self, event):
         self.f2_on = 1
@@ -294,6 +304,7 @@ class Gun:
         new_ball = Ball(n)
         new_ball.r += 5
         self.an = math.atan((event.y - new_ball.y) / (event.x - new_ball.x))
+        self.an = min(self.an, 0)
         new_ball.vx = self.f2_power * math.cos(self.an)
         new_ball.vy = - self.f2_power * math.sin(self.an)
         self.balls += [new_ball]
@@ -310,6 +321,7 @@ class Gun:
         else:
             canv.itemconfig(self.id, fill='black')
         self.move()
+        self.an = min(self.an, 0)
         canv.coords(self.id, self.x, self.y,
                     self.x + max(self.f2_power, 20) * math.cos(self.an),
                     self.y + max(self.f2_power, 20) * math.sin(self.an))
