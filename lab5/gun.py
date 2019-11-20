@@ -225,7 +225,10 @@ class Gun:
         self.vy = 0
         self.x = 40
         self.y = 450
-        self.id = canv.create_line(self.x, self.y, self.x + 30, self.y - 30, width=7)  # FIXME: don't know how to set it...
+        self.id = canv.create_line(self.x, self.y, self.x + 30, self.y - 30, width=7)
+
+        # FIXME: don't know how to set it...
+
         # self.id = canv.create_oval(x - r, y - r, x + r, y + r, fill=color)
 
         self.kol_1 = canv.create_oval(self.x - self.r, self.y + 5, self.x + self.r,
@@ -297,7 +300,6 @@ class Gun:
         """
         # balls, bullet
         self.bullet += 1
-        a = [0, 4, 5, 6, 7, 8]
         n = rnd(3, 8)
         if n == 3:
             n = 0
